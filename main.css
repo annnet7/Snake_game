@@ -1,0 +1,18 @@
+.field {
+    border: 1px solid #888;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    background-color: darkolivegreen;
+    box-sizing: border-box;
+}
+
+.snakeBody {
+    background-color: black;
+}
+
+.fruite {
+    background-color: brown;
+}
