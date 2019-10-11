@@ -32,6 +32,9 @@ function StartNewGame(){
         fieldDiv.appendChild(cellDiv);
     }
 }
+
+
+////////////
 StartNewGame();
 
 
@@ -85,16 +88,17 @@ let snake = {
             return;  
         }
         let newCoordinates = TransformCoordinatesToId(newPosition, fieldWidth);
-        if (document.getElementById(newCoordinates).className!="cell"){            
+        if (document.getElementById(newCoordinates).className=="snakeBody"){            
             alert("dead");  
             this.KillSnake();       
             return;  
-        }
-        //
+        }        
         this.snakeBody.unshift(newPosition);
-        let delCoordinates = this.snakeBody.pop();
-        let delId = TransformCoordinatesToId(delCoordinates, fieldWidth);
-        document.getElementById(delId).className = "cell";
+        if (document.getElementById(newCoordinates).className!="food"){
+            let delCoordinates = this.snakeBody.pop();
+            let delId = TransformCoordinatesToId(delCoordinates, fieldWidth);
+            document.getElementById(delId).className = "cell";
+        }    
         this.drawSnake();
     },
     changeDirection(dir) {
@@ -121,7 +125,9 @@ let snake = {
 ////
 snake.drawSnake();
 snake.AutoMove();
-
+document.getElementById(56).className="food";
+document.getElementById(245).className="food";
+document.getElementById(315).className="food";
 
 
 
