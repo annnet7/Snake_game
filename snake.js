@@ -21,17 +21,19 @@ function TransformIDToCoordinates(id, width, height) {
 function TransformCoordinatesToId(coordinates, width) {
     return coordinates[1] * width + coordinates[0];
 }
-
-for (let i = 0; i < fieldWidth * fieldHeight; i++) {
-    cellDiv = document.createElement("div");
-    cellDiv.className = "cell";
-    cellDiv.id = i;
-    cellDiv.coordinates = TransformIDToCoordinates(i, fieldWidth, fieldHeight);
-    cellDiv.style.width = cellsize + "px";
-    cellDiv.style.height = cellsize + "px";
-    fieldDiv.appendChild(cellDiv);
-    //console.log(cellDiv.coordinates);
+function StartNewGame(){
+    for (let i = 0; i < fieldWidth * fieldHeight; i++) {
+        cellDiv = document.createElement("div");
+        cellDiv.className = "cell";
+        cellDiv.id = i;
+        cellDiv.coordinates = TransformIDToCoordinates(i, fieldWidth, fieldHeight);
+        cellDiv.style.width = cellsize + "px";
+        cellDiv.style.height = cellsize + "px";
+        fieldDiv.appendChild(cellDiv);
+    }
 }
+StartNewGame();
+
 
 
 /* snake object*/
@@ -75,6 +77,20 @@ let snake = {
                 break;
         };
         //console.log(this.snakeBody);
+        //check the new step
+        if(newPosition[0]<0 || newPosition[0]>=fieldWidth || newPosition[1]<0 || newPosition[1]>=fieldHeight)
+        {
+            alert("dead");     
+            this.KillSnake();    
+            return;  
+        }
+        let newCoordinates = TransformCoordinatesToId(newPosition, fieldWidth);
+        if (document.getElementById(newCoordinates).className!="cell"){            
+            alert("dead");  
+            this.KillSnake();       
+            return;  
+        }
+        //
         this.snakeBody.unshift(newPosition);
         let delCoordinates = this.snakeBody.pop();
         let delId = TransformCoordinatesToId(delCoordinates, fieldWidth);
@@ -83,28 +99,47 @@ let snake = {
     },
     changeDirection(dir) {
         this.direction = dir;
+    },
+    AutoMove() {
+        this.move = setInterval(()=>{
+            snake.moveSnake();
+        },1000)
+    },
+    KillSnake() {
+        clearInterval(this.move);
+        this.snakeBody= [
+            [1, 3],
+            [1, 2],
+            [1, 1]
+        ];
     }
 }
 
+
+
+
+////
 snake.drawSnake();
+snake.AutoMove();
 
 
-document.addEventListener("keypress", function(myKey) {
-    console.log(myKey.code);
-    switch (myKey.code) {
-        case "Numpad2":
-            snake.changeDirection(2);
-            break;
-        case "Numpad4":
-            snake.changeDirection(4);
-            break;
-        case "Numpad6":
-            snake.changeDirection(6);
-            break;
-        case "Numpad8":
-            snake.changeDirection(8);
-            break;
-    };
-    snake.moveSnake();
 
+
+document.addEventListener("keydown", function(myKey) {
+    //console.log(myKey);
+    if(myKey.code == "Numpad2" || myKey.code == "ArrowDown" || myKey.code == "KeyS"){
+        snake.changeDirection(2);
+    }
+    if(myKey.code == "Numpad4" || myKey.code == "ArrowLeft"  || myKey.code == "KeyA"){
+        snake.changeDirection(4);
+    }
+    if(myKey.code == "Numpad6" || myKey.code == "ArrowRight"  || myKey.code == "KeyD"){
+        snake.changeDirection(6);
+    }
+    if(myKey.code == "Numpad8" || myKey.code == "ArrowUp"  || myKey.code == "KeyW"){
+        snake.changeDirection(8);
+    }    
+    //snake.moveSnake();
 });
+
+
