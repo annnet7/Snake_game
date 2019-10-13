@@ -13,25 +13,6 @@ fieldDiv.className = "field";
 fieldDiv.style.width = fieldWidth * cellsize + "px";
 fieldDiv.style.height = fieldHeight * cellsize + "px";
 document.body.appendChild(fieldDiv);
-//score counter
-let Score = {
-    scoreCount: 0,
-    startScore() {
-        this.scoreDiv = document.createElement("div");
-        document.body.appendChild(this.scoreDiv);
-        this.scoreDiv.className = "score";
-        this.scoreDiv.innerText = "Your score is " + this.scoreCount;
-    },
-    UpScore() {
-        this.scoreCount++;
-        this.scoreDiv.innerText = "Your score is " + this.scoreCount;
-    },
-    ZeroScore() {
-        this.scoreCount = 0;
-        this.scoreDiv.innerText = "Your score is " + this.scoreCount;
-    }
-};
-
 
 
 //special functions to operate with coordinates and cell ID
@@ -80,7 +61,61 @@ function makeFood() {
         cellDiv.className = "food";
     }
 }
-
+//bonus, Let make this game more interesting
+let achievements = [{
+        score: 2,
+        text: "Ok, I can see you know the rules of this game!",
+    },
+    {
+        score: 10,
+        text: "first 10 - Go go champion!",
+    },
+    {
+        score: 13,
+        text: "Hell thirteen - let's give this apple to Eve",
+    },
+    {
+        score: 18,
+        text: "Stop eating after 18:00 !!!",
+    },
+    {
+        score: 21,
+        text: "Now you can buy Tequila!",
+    },
+    {
+        score: 50,
+        text: "How can you do that?!!!",
+    },
+    {
+        score: 100,
+        text: "F..k this is ANACONDA",
+    },
+];
+//score counter
+let Score = {
+    scoreCount: 0,
+    startScore() {
+        this.scoreDiv = document.createElement("div");
+        document.body.appendChild(this.scoreDiv);
+        this.scoreDiv.className = "score";
+        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+        this.achivDiv = document.createElement("div");
+        this.achivDiv.innerHTML = "<p>Your achievements:</p>";
+        document.body.appendChild(this.achivDiv);
+    },
+    UpScore() {
+        this.scoreCount++;
+        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+        let lookForAchiv = achievements.filter(x => x.score === this.scoreCount);
+        if (lookForAchiv.length > 0) {
+            this.achivDiv.innerHTML += "<p>" + lookForAchiv[0].text + "</p>";
+        }
+    },
+    ZeroScore() {
+        this.scoreCount = 0;
+        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+    }
+};
 /* snake object*/
 //coordinatets start from [0,0]
 // Controls: 
@@ -97,6 +132,7 @@ let snake = {
     ],
     direction: 2,
     speed: 0.5,
+    pauseGame: false,
     drawSnake() {
         this.snakeBody.map(function(el) {
             let divId = TransformCoordinatesToId(el, fieldWidth);
@@ -153,6 +189,15 @@ let snake = {
             snake.moveSnake();
         }, this.speed * 1000)
     },
+    PauseMove() {
+        if (this.pauseGame) {
+            this.AutoMove();
+
+        } else {
+            clearInterval(this.move);
+        }
+        this.pauseGame = !(this.pauseGame);
+    },
     KillSnake() {
         //back to start position and move direction
         clearInterval(this.move);
@@ -176,7 +221,7 @@ let snake = {
 
 
 document.addEventListener("keydown", function(myKey) {
-    //console.log(myKey);
+    // console.log(myKey);
     if (myKey.code == "Numpad2" || myKey.code == "ArrowDown" || myKey.code == "KeyS") {
         snake.changeDirection(2);
     }
@@ -188,6 +233,9 @@ document.addEventListener("keydown", function(myKey) {
     }
     if (myKey.code == "Numpad8" || myKey.code == "ArrowUp" || myKey.code == "KeyW") {
         snake.changeDirection(8);
+    }
+    if (myKey.code == "Space") {
+        snake.PauseMove();
     }
 });
 
