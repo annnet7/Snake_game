@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Snake</title>
-    <link rel="stylesheet" href="main.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Snake</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
 
-<body>
-    <script src="snake.js"></script>
-</body>
+    <body>
+        <div class="rules">
+            <h2>Rules and controls:</h2>
+            <p>arrows: &#8592;&#8593;&#8594;&#8595;</p>
+            <p>numpad: 4 - left; 8 - up; 6 - right; 2- down;</p>
+            <p>keyboard: A - left; W - up; D - right; S - down;</p>
+            <p>PAUSE - Space</p>
+            <p>You can't change the field size after start</p>
+            <p>After death you continue the game but you <br>lose your scores</p>
+            <p>To start new game - refresh the page (F5)</p>
+        </div>
+        <div class="gameSettings">
+            <p> width:
+                <input type="number" min="10" max="200" id="fieldWidthInput"
+                    value="20">
+            </p><p>
+                height:
+                <input type="number" min="10" max="200" id="fieldHeightInput"
+                    value="20">
+            </p>
+            <button id="startGameBtn">Start!</button>
+        </div>
+        <script src="snake.js"></script>
+    </body>
 
 </html>

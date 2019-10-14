@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 body {
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .field {
-    border: 1px solid #888;
+    /* border: 1px solid #888; */
     display: flex;
     flex-wrap: wrap;
 }
@@ -29,4 +29,57 @@ body {
 p {
     margin-top: 5px;
     margin-bottom: 0px;
+}
+
+.rules {
+    margin-bottom: 20px;
+}
+
+button {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background: darkolivegreen;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.6em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+}
+
+button:hover {
+    background: #fff;
+    color: darkolivegreen;
+}
+
+button:before,
+button:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: darkolivegreen;
+    transition: 400ms ease all;
+}
+
+button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+}
+
+button:hover:before,
+button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
+}
+
+button:disabled {
+    background: #a3a3a3;
 }

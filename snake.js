@@ -2,16 +2,14 @@
 
 /*spawn the field*/
 //the field width and height is not a pixels - this is cell counts
-const fieldWidth = 20;
-const fieldHeight = 20;
+let fieldWidth = 20;
+let fieldHeight = 20;
 //pixel size of the one cell (calibre)
 const cellsize = 10;
 
 //the field where snake lives
 const fieldDiv = document.createElement("div");
 fieldDiv.className = "field";
-fieldDiv.style.width = fieldWidth * cellsize + "px";
-fieldDiv.style.height = fieldHeight * cellsize + "px";
 document.body.appendChild(fieldDiv);
 
 
@@ -31,6 +29,8 @@ let cellsCount = 0;
 
 function StartNewGame() {
     if (cellsCount === 0) {
+        fieldDiv.style.width = fieldWidth * cellsize + "px";
+        fieldDiv.style.height = fieldHeight * cellsize + "px";
         //create all new divs in the field
         for (let i = 0; i < fieldWidth * fieldHeight; i++) {
             cellDiv = document.createElement("div");
@@ -98,14 +98,14 @@ let Score = {
         this.scoreDiv = document.createElement("div");
         document.body.appendChild(this.scoreDiv);
         this.scoreDiv.className = "score";
-        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+        this.scoreDiv.innerHTML = "SCORE: <span class='scoreNum'>" + this.scoreCount + "</span>";
         this.achivDiv = document.createElement("div");
-        this.achivDiv.innerHTML = "<p>Your achievements:</p>";
+        this.achivDiv.innerHTML = "<h3>Your achievements:</h3>";
         document.body.appendChild(this.achivDiv);
     },
     UpScore() {
         this.scoreCount++;
-        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+        this.scoreDiv.innerHTML = "SCORE: <span class='scoreNum'>" + this.scoreCount + "</span>";
         let lookForAchiv = achievements.filter(x => x.score === this.scoreCount);
         if (lookForAchiv.length > 0) {
             this.achivDiv.innerHTML += "<p>" + lookForAchiv[0].text + "</p>";
@@ -113,7 +113,7 @@ let Score = {
     },
     ZeroScore() {
         this.scoreCount = 0;
-        this.scoreDiv.innerHTML = "Your score is <span class='scoreNum'>" + this.scoreCount + "</span>";
+        this.scoreDiv.innerHTML = "SCORE: <span class='scoreNum'>" + this.scoreCount + "</span>";
     }
 };
 /* snake object*/
@@ -131,7 +131,7 @@ let snake = {
         [1, 1]
     ],
     direction: 2,
-    speed: 0.5,
+    speed: 1,
     pauseGame: false,
     drawSnake() {
         this.snakeBody.map(function(el) {
@@ -174,6 +174,10 @@ let snake = {
         if (document.getElementById(newPositionID).className == "food") {
             makeFood();
             Score.UpScore();
+            //up speed
+            this.speed = this.speed * 0.9;
+            clearInterval(this.move);
+            this.AutoMove();
         } else {
             let delCoordinates = this.snakeBody.pop();
             let delId = TransformCoordinatesToId(delCoordinates, fieldWidth);
@@ -207,6 +211,7 @@ let snake = {
             [1, 1]
         ];
         this.direction = 2;
+        this.speed = 1;
         //fill the field
         StartNewGame();
         this.drawSnake();
@@ -241,8 +246,19 @@ document.addEventListener("keydown", function(myKey) {
 
 
 //first start
-StartNewGame();
-snake.drawSnake();
-snake.AutoMove();
-makeFood();
-Score.startScore();
+let startBtn = document.getElementById("startGameBtn");
+startBtn.addEventListener("click", function() {
+
+    let widthInputValue = Number(document.getElementById("fieldWidthInput").value);
+    let heightInputValue = Number(document.getElementById("fieldHeightInput").value);
+    fieldWidth = (widthInputValue >= 10 && widthInputValue < 200) ? widthInputValue : 20;
+    fieldHeight = (heightInputValue >= 10 && heightInputValue < 200) ? heightInputValue : 20;
+    //disabled settings
+    console.log(this);
+    this.disabled = true;
+    StartNewGame();
+    snake.drawSnake();
+    snake.AutoMove();
+    makeFood();
+    Score.startScore();
+})
