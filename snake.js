@@ -2,8 +2,8 @@
 
 /*spawn the field*/
 //the field width and height is not a pixels - this is cell counts
-let fieldWidth = 20;
-let fieldHeight = 20;
+let fieldWidth;
+let fieldHeight;
 //pixel size of the one cell (calibre)
 const cellsize = 10;
 
